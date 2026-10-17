@@ -10,6 +10,17 @@ const config = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: "*.supabase.co",
+      },
+      {
+        protocol: "https",
+        hostname: "oaiyaqqxaqqwlqnoquip.supabase.co",
+      },
+      {
+        hostname: "oaiyaqqxaqqwlqnoquip.supabase.co",
+      },
+      {
         hostname: "flagsapi.com",
       },
       {
