@@ -17,6 +17,7 @@ import {
   printCreatorValidationSchema,
 } from "./MenuPrintCreator.schema";
 import { saveFormValuesToCookies } from "./MenuPrintCreator.common";
+import { getBaseUrl } from "~/utils/getBaseUrl";
 
 export const MenuPrintCreatorPage = ({
   slug,
@@ -192,7 +193,7 @@ export const MenuPrintCreatorPage = ({
       </div>
       <MenuPdfGenerator
         {...debouncedValues}
-        qrCodeUrl={`www.feastqr.com/menu/${slug}`}
+        qrCodeUrl={`${getBaseUrl()}/menu/${slug}`}
         menuLogoImageUrl={data?.logoImageUrl ?? null}
       />
     </div>

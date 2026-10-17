@@ -15,18 +15,18 @@ const checkoutTranslations: Record<"en" | "pl", LemonsqueezyProductOptions> = {
   en: {
     description: "Display QR menus to your clients.",
     name: "FeastQR Menu",
-    receipt_button_text: "Go to FeastQR",
-    receipt_link_url: "https://www.feastqr.com/dashboard",
+    receipt_button_text: "Go to Dashboard",
+    receipt_link_url: "https://reness-menu.vercel.app/dashboard",
     receipt_thank_you_note: "Thank you for your purchase!",
-    redirect_url: "https://www.feastqr.com/dashboard",
+    redirect_url: "https://reness-menu.vercel.app/dashboard",
   },
   pl: {
     description: "Wyświetlaj menu QR Twoim klientom.",
     name: "FeastQR Menu",
-    receipt_button_text: "Przejdź do FeastQR",
-    receipt_link_url: "https://www.feastqr.com/dashboard",
+    receipt_button_text: "Przejdź do panelu",
+    receipt_link_url: "https://reness-menu.vercel.app/dashboard",
     receipt_thank_you_note: "Dziękujemy za zakup!",
-    redirect_url: "https://www.feastqr.com/dashboard",
+    redirect_url: "https://reness-menu.vercel.app/dashboard",
   },
 };
 

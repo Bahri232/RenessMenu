@@ -163,8 +163,16 @@ export const RestaurantDashboard = ({
           <p className="text-3xl font-semibold">
             {t("restaurantDashboard.yourQRCode")}
           </p>
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col items-center gap-4">
             <QRCode size={200} value={`${getBaseUrl()}/menu/${data.slug}`} />
+            <a
+              href={`${getBaseUrl()}/menu/${data.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="max-w-[220px] break-all text-center text-xs text-muted-foreground hover:text-primary hover:underline"
+            >
+              {`${getBaseUrl()}/menu/${data.slug}`}
+            </a>
             <Button
               onClick={() => router.push(`/menu/manage/${slug}/menu`)}
               className="w-full"
