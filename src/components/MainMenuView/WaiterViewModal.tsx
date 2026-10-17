@@ -116,7 +116,7 @@ export const WaiterViewModal = ({
                             {item.name}
                           </h3>
                           <span className="text-xs font-medium text-slate-500 sm:text-sm">
-                            {unitPrice.toFixed(2)} PLN each
+                            Le {unitPrice.toFixed(2)} each
                           </span>
                         </div>
                       </div>
@@ -124,10 +124,7 @@ export const WaiterViewModal = ({
                       {/* Right: Line total */}
                       <div className="text-right shrink-0">
                         <span className="text-lg font-black text-slate-950 sm:text-xl">
-                          {lineTotal.toFixed(2)}
-                        </span>
-                        <span className="ml-1 text-xs font-bold text-slate-500">
-                          PLN
+                          Le {lineTotal.toFixed(2)}
                         </span>
                       </div>
                     </div>
@@ -184,8 +181,8 @@ export const WaiterViewModal = ({
                   Grand Total
                 </span>
                 <div className="text-2xl font-black text-slate-950 sm:text-3xl">
-                  {(totalPrice / 100).toFixed(2)}{" "}
-                  <span className="text-sm font-bold text-slate-600">PLN</span>
+                  <span className="text-lg font-bold text-slate-600 mr-1">Le</span>
+                  {(totalPrice / 100).toFixed(2)}
                 </div>
               </div>
             </div>

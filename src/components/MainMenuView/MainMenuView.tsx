@@ -285,8 +285,8 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
                 </span>
               </div>
               <div className="mt-0.5 text-xl font-black tracking-tight text-white sm:text-2xl">
-                {(totalPrice / 100).toFixed(2)}{" "}
-                <span className="text-xs font-bold text-slate-400">PLN</span>
+                <span className="text-sm font-bold text-slate-400 mr-1">Le</span>
+                {(totalPrice / 100).toFixed(2)}
               </div>
             </div>
 
@@ -338,10 +338,10 @@ const Tags = ({ tags }: { tags: string[] }) => {
 const PriceCard = ({ price }: { price: number }) => {
   return (
     <div className="flex items-baseline gap-1 pt-0.5">
+      <span className="text-xs font-bold text-slate-500">Le</span>
       <div className="text-base font-extrabold text-slate-900">
         {(price / 100).toFixed(2)}
       </div>
-      <span className="text-[10px] font-bold text-slate-500">PLN</span>
     </div>
   );
 };
@@ -429,7 +429,7 @@ const VariantCard = ({
         )}
         {price !== null && (
           <span className="text-xs font-extrabold text-slate-700">
-            {(price / 100).toFixed(2)} PLN
+            Le {(price / 100).toFixed(2)}
           </span>
         )}
       </div>
