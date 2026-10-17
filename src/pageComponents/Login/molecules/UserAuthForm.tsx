@@ -37,7 +37,24 @@ export function UserAuthForm() {
     },
   });
   const onSubmit = async (data: LoginFormValues) => {
-    const { error } = await supabase().auth.signInWithPassword(data);
+    let { error } = await supabase().auth.signInWithPassword(data);
+
+    if (error && error.message.toLowerCase().includes("email not confirmed")) {
+      try {
+        const res = await fetch("/api/auth/auto-confirm", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: data.email }),
+        });
+
+        if (res.ok) {
+          const retry = await supabase().auth.signInWithPassword(data);
+          error = retry.error;
+        }
+      } catch (confirmErr) {
+        // Continue with original error
+      }
+    }
 
     if (error) {
       toast({
@@ -49,6 +66,14 @@ export function UserAuthForm() {
 
       return;
     }
+
+    toast({
+      title: "Welcome back!",
+      description: "Redirecting to your dashboard...",
+      duration: 3000,
+    });
+
+    window.location.href = "/dashboard";
   };
 
   return (

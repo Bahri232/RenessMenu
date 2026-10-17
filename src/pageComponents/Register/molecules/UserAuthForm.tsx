@@ -75,24 +75,71 @@ export function UserAuthForm() {
 
   const onSubmit = async (data: RegisterFormValues) => {
     try {
-      await supabase().auth.signUp({
-        ...data,
-        options: {
-          data: translations[i18n.language as "en" | "pl"],
-        },
+      // 1. Attempt instant registration with auto-confirmation
+      const response = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: data.email, password: data.password }),
       });
 
-      toast({
-        title: t("register.checkYourEmailForConfirmation"),
-        description: t("common.confirmYourEmail"),
-        variant: "default",
-        duration: 9000,
+      const resData = await response.json();
+
+      if (!response.ok) {
+        throw new Error(resData.error || "Registration failed");
+      }
+
+      // 2. Automatically sign in
+      const { error: signInError } = await supabase().auth.signInWithPassword({
+        email: data.email,
+        password: data.password,
       });
-    } catch (e) {
-      if (isAuthError(e)) {
+
+      if (signInError) {
+        throw signInError;
+      }
+
+      toast({
+        title: "Account Created!",
+        description: "Welcome to your digital menu. Redirecting to dashboard...",
+        duration: 3000,
+      });
+
+      window.location.href = "/dashboard";
+    } catch (e: any) {
+      // Fallback: try standard supabase client signUp if API route isn't reachable
+      try {
+        const { data: signUpData, error: signUpError } = await supabase().auth.signUp({
+          email: data.email,
+          password: data.password,
+          options: {
+            data: translations[i18n.language as "en" | "pl"],
+          },
+        });
+
+        if (signUpError) {
+          throw signUpError;
+        }
+
+        if (signUpData.session) {
+          toast({
+            title: "Account Created!",
+            description: "Redirecting to your dashboard...",
+            duration: 3000,
+          });
+          window.location.href = "/dashboard";
+          return;
+        }
+
         toast({
-          title: "Error",
-          description: e.message,
+          title: t("register.checkYourEmailForConfirmation"),
+          description: t("common.confirmYourEmail"),
+          variant: "default",
+          duration: 9000,
+        });
+      } catch (fallbackError: any) {
+        toast({
+          title: "Registration Error",
+          description: e?.message || fallbackError?.message || "Could not create account",
           variant: "destructive",
           duration: 9000,
         });
