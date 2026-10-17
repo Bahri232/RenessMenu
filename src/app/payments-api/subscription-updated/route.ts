@@ -46,6 +46,12 @@ type Payload = {
 
 export const POST = async (request: NextRequest) => {
   try {
+    if (!env.LEMONS_SQUEEZY_SIGNATURE_SECRET) {
+      return new Response("LemonSqueezy webhook secret is not configured", {
+        status: 200,
+      });
+    }
+
     const text = await request.text();
     const hmac = crypto.createHmac(
       "sha256",

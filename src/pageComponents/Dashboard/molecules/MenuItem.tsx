@@ -21,11 +21,11 @@ export function MenuItem({ menu }: MenuItemProps) {
             />
           )}
         </div>
-        <Link href={`/menu/manage/${menu.slug}/restaurant`}>
+        <Link href={`/menu/manage/${menu.slug}/restaurant`} className="min-w-0 flex-1">
           <div className="flex flex-row items-center gap-4">
-            <div className="flex flex-col whitespace-nowrap">
-              <p className="whitespace-nowrap font-semibold">{menu.name}</p>
-              <p>{menu.address}</p>
+            <div className="flex flex-col min-w-0">
+              <p className="font-semibold break-words">{menu.name}</p>
+              <p className="text-sm text-muted-foreground break-words">{menu.address}</p>
             </div>
           </div>
         </Link>

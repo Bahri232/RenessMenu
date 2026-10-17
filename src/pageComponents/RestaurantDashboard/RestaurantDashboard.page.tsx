@@ -90,13 +90,13 @@ export const RestaurantDashboard = ({
               />
             )}
           </div>
-          <div className="flex flex-col justify-center gap-2">
-            <h1 className="whitespace-nowrap text-3xl font-semibold">
+          <div className="flex flex-col justify-center gap-2 min-w-0 flex-1">
+            <h1 className="break-words text-2xl md:text-3xl font-semibold">
               {data.name}
             </h1>
-            <div className="flex flex-row gap-2">
-              <Icons.map />
-              <h3 className="text-md whitespace-nowrap">
+            <div className="flex flex-row items-center gap-2">
+              <Icons.map className="shrink-0" />
+              <h3 className="text-sm md:text-base break-words text-muted-foreground">
                 {data.city}, {data.address}
               </h3>
             </div>

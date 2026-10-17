@@ -10,16 +10,6 @@ const sidebarNavItems = [
     icon: "menu",
   },
   {
-    title: "Billing",
-    href: "/dashboard/billing",
-    icon: "billing",
-  },
-  // {
-  //   title: <TranslatedText id="dashboardSidenav.affiliates" />,
-  //   href: "/dashboard/affiliates",
-  //   icon: "user",
-  // },
-  {
     title: <TranslatedText id="dashboardSidenav.settings" />,
     href: "/dashboard/settings",
     icon: "settings",

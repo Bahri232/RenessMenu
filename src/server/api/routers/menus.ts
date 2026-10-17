@@ -614,20 +614,6 @@ export const menusRouter = createTRPCRouter({
   publishMenu: privateProcedure
     .input(z.object({ menuId: z.string() }))
     .mutation(async ({ ctx, input }) => {
-      const subscription = await ctx.db.subscriptions.findFirst({
-        where: {
-          profileId: ctx.user.id,
-        },
-      });
-      const isSubscriptionActive = checkIfSubscribed(subscription?.status);
-
-      if (!isSubscriptionActive) {
-        throw new TRPCError({
-          code: "NOT_FOUND",
-          message: "You need to subscribe to publish your menu",
-        });
-      }
-
       return ctx.db.menus.update({
         where: {
           id: input.menuId,
