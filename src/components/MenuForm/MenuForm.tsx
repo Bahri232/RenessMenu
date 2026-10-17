@@ -84,12 +84,16 @@ export const useUpsertMenu = () => {
       await Promise.all([updateLogoPromise, updateBgPromise]);
 
       router.push(`/menu/manage/${newMenu.slug}/restaurant`);
-    } catch (error) {
+    } catch (error: any) {
+      console.error("Error saving restaurant menu:", error);
       toast({
-        title: "Coś poszło nie tak",
-        description: "Odśwież stronę i spróbuj ponownie",
+        title: "Could not save restaurant",
+        description:
+          error?.message ||
+          error?.data?.message ||
+          "Please check your inputs and try again.",
         variant: "destructive",
-        duration: 5000,
+        duration: 6000,
       });
     }
   };

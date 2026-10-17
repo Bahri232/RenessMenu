@@ -187,6 +187,28 @@ export const menusRouter = createTRPCRouter({
   upsertMenu: privateProcedure
     .input(menuValidationSchema)
     .mutation(async ({ ctx, input }) => {
+      const defaultLanguage =
+        (await ctx.db.languages.findFirst({
+          where: { name: "English" },
+        })) ??
+        (await ctx.db.languages.findFirst({
+          where: { name: POLISH_LANGUAGE_NAME },
+        })) ??
+        (await ctx.db.languages.findFirst());
+
+      let languageId = defaultLanguage?.id;
+      if (!languageId) {
+        const createdLang = await ctx.db.languages.create({
+          data: {
+            id: "56ef000f-2a05-41ab-bbfa-6f1a619306ed",
+            name: "English",
+            isoCode: "GB",
+            flagUrl: "https://flagsapi.com/GB/flat/64.png",
+          },
+        });
+        languageId = createdLang.id;
+      }
+
       return await ctx.db.menus.upsert({
         where: {
           id: input.id || "00000000-0000-0000-0000-000000000000",
@@ -208,7 +230,7 @@ export const menusRouter = createTRPCRouter({
               isDefault: true,
               languages: {
                 connect: {
-                  name: POLISH_LANGUAGE_NAME,
+                  id: languageId,
                 },
               },
             },
