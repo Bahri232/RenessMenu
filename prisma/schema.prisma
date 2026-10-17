@@ -498,6 +498,8 @@ enum FactorStatus {
 enum FactorType {
   totp
   webauthn
+  phone
+  recovery_code
 
   @@map("factor_type")
   @@schema("auth")
