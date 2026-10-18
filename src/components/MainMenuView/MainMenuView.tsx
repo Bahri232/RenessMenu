@@ -16,13 +16,27 @@ import { Badge } from "../ui/badge";
 import { tagsTranslations } from "~/utils/tags";
 import { notEmpty } from "~/utils/utils";
 import { assert } from "~/utils/assert";
-import { useMenuSelection } from "./useMenuSelection";
+import { useMenuSelection, type SelectedModifier } from "./useMenuSelection";
 import { WaiterViewModal } from "./WaiterViewModal";
 import { Icons } from "~/components/Icons";
+import { formatCurrency } from "~/utils/formatCurrency";
+import {
+  getDishModifierGroups,
+  type ModifierGroup,
+} from "~/data/renessDelightMenu";
+import { ModifierModal } from "./ModifierModal";
 
 export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
   const defaultLanguageSet = useRef(false);
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+  const [activeModifierDish, setActiveModifierDish] = useState<{
+    id: string;
+    name: string;
+    price: number;
+    description?: string | null;
+    modifierGroups: ModifierGroup[];
+  } | null>(null);
+
   const { t } = useTranslation();
 
   const defaultLanguage = getDefaultLanguage(menu.menuLanguages);
@@ -45,9 +59,39 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
     removeItem,
     clearSelection,
     getItemQuantity,
+    getDishTotalQuantity,
     isWaiterModalOpen,
     setIsWaiterModalOpen,
   } = useMenuSelection(menu.slug);
+
+  const handleModifierAdd = useCallback(
+    ({
+      dishId,
+      name,
+      price,
+      modifiers,
+    }: {
+      dishId: string;
+      name: string;
+      price: number;
+      modifiers: SelectedModifier[];
+    }) => {
+      const modifierSignature = modifiers
+        .map((m) => `${m.group}:${m.option}`)
+        .sort()
+        .join("__");
+      const uniqueId = `${dishId}__${modifierSignature}`;
+
+      addItem({
+        id: uniqueId,
+        dishId,
+        name,
+        price,
+        modifiers,
+      });
+    },
+    [addItem],
+  );
 
   return (
     <div className="relative z-0 flex min-h-screen w-full flex-col bg-white pb-32">
@@ -77,7 +121,7 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
           </div>
         </div>
 
-        {/* Categories Bar - Horizontal scrollable & no aggressive text truncation */}
+        {/* Categories Bar - Horizontal scrollable */}
         <div className="sticky top-0 z-30 flex w-full flex-row items-center justify-between bg-white/95 backdrop-blur-sm">
           <CategoriesNavigation
             categories={parsedDishes
@@ -107,7 +151,13 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
                   )}
                   <ul className="flex flex-col gap-4">
                     {dishes.map((dish) => {
-                      const dishQuantity = getItemQuantity(dish.id);
+                      const modifierGroups = getDishModifierGroups(
+                        dish.name,
+                        dish.translatedDishVariants,
+                      );
+                      const hasModifiers = modifierGroups.length > 0;
+                      const dishTotalQuantity = getDishTotalQuantity(dish.id);
+                      const directQuantity = getItemQuantity(dish.id);
 
                       return (
                         <li
@@ -141,6 +191,20 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
                                 </p>
                               )}
 
+                              {/* Modifiers Pill Indicator */}
+                              {hasModifiers && (
+                                <div className="mt-1 flex flex-wrap gap-1">
+                                  {modifierGroups.map((group) => (
+                                    <span
+                                      key={group.id}
+                                      className="inline-flex items-center rounded-md bg-amber-50 border border-amber-200 px-2 py-0.5 text-[11px] font-bold text-amber-800"
+                                    >
+                                      {group.name} (Pick 1)
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+
                               {/* Tags */}
                               {dish.dishesTag && dish.dishesTag.length > 0 && (
                                 <Tags
@@ -165,81 +229,88 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
                             )}
                           </div>
 
-                          {/* Action Bar for Dish Selection & Variants */}
+                          {/* Action Bar for Dish Selection & Modifiers */}
                           <div className="flex w-full flex-col gap-2 pt-2 border-t border-slate-100">
-                            {/* Variants List if any */}
-                            {dish.dishVariants && dish.dishVariants.length > 0 && (
-                              <div className="flex w-full flex-col gap-2 py-1">
-                                {getDishVariantsTranslated({
-                                  dishVariants: dish.dishVariants,
-                                  languageId:
-                                    selectedLanguage ||
-                                    defaultLanguage.languageId,
-                                }).map((variant) => {
-                                  const variantQuantity = getItemQuantity(
-                                    variant.id,
-                                  );
+                            {/* If dish does NOT have modifier groups but has traditional standalone variants */}
+                            {!hasModifiers &&
+                              dish.dishVariants &&
+                              dish.dishVariants.length > 0 && (
+                                <div className="flex w-full flex-col gap-2 py-1">
+                                  {getDishVariantsTranslated({
+                                    dishVariants: dish.dishVariants,
+                                    languageId:
+                                      selectedLanguage ||
+                                      defaultLanguage.languageId,
+                                  }).map((variant) => {
+                                    const variantQuantity = getItemQuantity(
+                                      variant.id,
+                                    );
 
-                                  return (
-                                    <VariantCard
-                                      key={variant.id}
-                                      name={variant.name || ""}
-                                      price={variant.price}
-                                      description={variant.description || ""}
-                                      quantity={variantQuantity}
-                                      onAdd={() =>
-                                        addItem({
-                                          id: variant.id,
-                                          dishId: dish.id,
-                                          name: `${dish.name} (${variant.name})`,
-                                          price: variant.price || dish.price,
-                                        })
-                                      }
-                                      onRemove={() => removeItem(variant.id)}
-                                    />
-                                  );
-                                })}
-                              </div>
-                            )}
+                                    return (
+                                      <VariantCard
+                                        key={variant.id}
+                                        name={variant.name || ""}
+                                        price={variant.price}
+                                        description={variant.description || ""}
+                                        quantity={variantQuantity}
+                                        onAdd={() =>
+                                          addItem({
+                                            id: variant.id,
+                                            dishId: dish.id,
+                                            name: `${dish.name} (${variant.name})`,
+                                            price: variant.price || dish.price,
+                                          })
+                                        }
+                                        onRemove={() => removeItem(variant.id)}
+                                      />
+                                    );
+                                  })}
+                                </div>
+                              )}
 
-                            {/* Base Dish Selection Controls */}
+                            {/* Dish Controls */}
                             <div className="flex w-full items-center justify-between pt-1">
                               <span className="text-xs font-semibold text-slate-400">
-                                {dish.dishVariants?.length
-                                  ? "Standard Option:"
+                                {hasModifiers
+                                  ? dishTotalQuantity > 0
+                                    ? `${dishTotalQuantity} in selection`
+                                    : "Required options:"
                                   : "Add to order:"}
                               </span>
 
-                              {dishQuantity === 0 ? (
-                                <button
-                                  type="button"
-                                  onClick={() =>
-                                    addItem({
-                                      id: dish.id,
-                                      dishId: dish.id,
-                                      name: dish.name,
-                                      price: dish.price,
-                                    })
-                                  }
-                                  className="flex items-center gap-1.5 rounded-xl border-2 border-slate-900 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-900 shadow-sm transition-all hover:bg-slate-900 hover:text-white active:scale-95"
-                                  aria-label={`Select ${dish.name}`}
-                                >
-                                  <Icons.add className="h-3.5 w-3.5" />
-                                  <span>Select</span>
-                                </button>
-                              ) : (
-                                <div className="flex items-center gap-2 rounded-xl bg-slate-950 p-1 text-white shadow-md">
+                              {hasModifiers ? (
+                                /* Dish HAS Required Modifiers -> Open Modal */
+                                <div className="flex items-center gap-2">
+                                  {dishTotalQuantity > 0 && (
+                                    <span className="rounded-lg bg-emerald-50 border border-emerald-300 px-2.5 py-1 text-xs font-black text-emerald-800">
+                                      {dishTotalQuantity} selected
+                                    </span>
+                                  )}
                                   <button
                                     type="button"
-                                    onClick={() => removeItem(dish.id)}
-                                    className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-800 text-sm font-black text-white hover:bg-slate-700 active:scale-90"
-                                    aria-label={`Decrease ${dish.name}`}
+                                    onClick={() =>
+                                      setActiveModifierDish({
+                                        id: dish.id,
+                                        name: dish.name,
+                                        price: dish.price,
+                                        description: dish.description,
+                                        modifierGroups,
+                                      })
+                                    }
+                                    className="flex items-center gap-1.5 rounded-xl border-2 border-slate-900 bg-slate-950 px-3.5 py-1.5 text-xs font-bold text-white shadow-sm transition-all hover:bg-slate-800 active:scale-95"
+                                    aria-label={`Select options for ${dish.name}`}
                                   >
-                                    -
+                                    <Icons.add className="h-3.5 w-3.5" />
+                                    <span>
+                                      {dishTotalQuantity > 0
+                                        ? "Add Another"
+                                        : "Select"}
+                                    </span>
                                   </button>
-                                  <span className="min-w-[22px] text-center text-sm font-black">
-                                    {dishQuantity}
-                                  </span>
+                                </div>
+                              ) : (
+                                /* Dish has NO Modifiers -> 1-Tap Select & Direct Stepper */
+                                directQuantity === 0 ? (
                                   <button
                                     type="button"
                                     onClick={() =>
@@ -250,12 +321,42 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
                                         price: dish.price,
                                       })
                                     }
-                                    className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-800 text-sm font-black text-white hover:bg-slate-700 active:scale-90"
-                                    aria-label={`Increase ${dish.name}`}
+                                    className="flex items-center gap-1.5 rounded-xl border-2 border-slate-900 bg-white px-3.5 py-1.5 text-xs font-bold text-slate-900 shadow-sm transition-all hover:bg-slate-900 hover:text-white active:scale-95"
+                                    aria-label={`Select ${dish.name}`}
                                   >
-                                    +
+                                    <Icons.add className="h-3.5 w-3.5" />
+                                    <span>Select</span>
                                   </button>
-                                </div>
+                                ) : (
+                                  <div className="flex items-center gap-2 rounded-xl bg-slate-950 p-1 text-white shadow-md">
+                                    <button
+                                      type="button"
+                                      onClick={() => removeItem(dish.id)}
+                                      className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-800 text-sm font-black text-white hover:bg-slate-700 active:scale-90"
+                                      aria-label={`Decrease ${dish.name}`}
+                                    >
+                                      -
+                                    </button>
+                                    <span className="min-w-[22px] text-center text-sm font-black">
+                                      {directQuantity}
+                                    </span>
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        addItem({
+                                          id: dish.id,
+                                          dishId: dish.id,
+                                          name: dish.name,
+                                          price: dish.price,
+                                        })
+                                      }
+                                      className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-800 text-sm font-black text-white hover:bg-slate-700 active:scale-90"
+                                      aria-label={`Increase ${dish.name}`}
+                                    >
+                                      +
+                                    </button>
+                                  </div>
+                                )
                               )}
                             </div>
                           </div>
@@ -270,7 +371,7 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
         </div>
       </div>
 
-      {/* Sticky Bottom Floating Bar (Task 2) */}
+      {/* Sticky Bottom Floating Bar */}
       {totalItems > 0 && (
         <div className="pointer-events-none fixed bottom-0 left-0 right-0 z-40 flex justify-center p-4 pb-6">
           <div className="pointer-events-auto flex w-full max-w-xl items-center justify-between gap-4 rounded-2xl border-2 border-slate-800 bg-slate-950 p-4 text-white shadow-2xl animate-in slide-in-from-bottom-5 duration-300">
@@ -285,8 +386,7 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
                 </span>
               </div>
               <div className="mt-0.5 text-xl font-black tracking-tight text-white sm:text-2xl">
-                <span className="text-sm font-bold text-slate-400 mr-1">Le</span>
-                {(totalPrice / 100).toFixed(2)}
+                {formatCurrency(totalPrice)}
               </div>
             </div>
 
@@ -294,7 +394,7 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
             <button
               type="button"
               onClick={() => setIsWaiterModalOpen(true)}
-              className="flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 active:scale-95 sm:text-base"
+              className="flex items-center gap-2 rounded-xl bg-emerald-500 px-5 py-3 text-sm font-black text-slate-950 shadow-lg shadow-emerald-500/20 transition-all hover:bg-emerald-400 active:scale-95 sm:text-base cursor-pointer"
             >
               <Icons.menuSquare className="h-5 w-5" />
               <span>Show My Selection</span>
@@ -303,7 +403,18 @@ export const MainMenuView = ({ menu }: { menu: FullMenuOutput }) => {
         </div>
       )}
 
-      {/* Full-Screen "Waiter View" Modal (Task 2) */}
+      {/* Required Modifiers Selection Modal */}
+      {activeModifierDish && (
+        <ModifierModal
+          isOpen={Boolean(activeModifierDish)}
+          onClose={() => setActiveModifierDish(null)}
+          dish={activeModifierDish}
+          modifierGroups={activeModifierDish.modifierGroups}
+          onAddToSelection={handleModifierAdd}
+        />
+      )}
+
+      {/* Full-Screen "Waiter View" Modal */}
       <WaiterViewModal
         isOpen={isWaiterModalOpen}
         onClose={() => setIsWaiterModalOpen(false)}
@@ -337,10 +448,9 @@ const Tags = ({ tags }: { tags: string[] }) => {
 
 const PriceCard = ({ price }: { price: number }) => {
   return (
-    <div className="flex items-baseline gap-1 pt-0.5">
-      <span className="text-xs font-bold text-slate-500">Le</span>
+    <div className="pt-0.5">
       <div className="text-base font-extrabold text-slate-900">
-        {(price / 100).toFixed(2)}
+        {formatCurrency(price)}
       </div>
     </div>
   );
@@ -429,7 +539,7 @@ const VariantCard = ({
         )}
         {price !== null && (
           <span className="text-xs font-extrabold text-slate-700">
-            Le {(price / 100).toFixed(2)}
+            {formatCurrency(price)}
           </span>
         )}
       </div>
@@ -449,17 +559,17 @@ const VariantCard = ({
               <button
                 type="button"
                 onClick={onRemove}
-                className="flex h-5 w-5 items-center justify-center rounded bg-slate-800 text-xs font-bold hover:bg-slate-700"
+                className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-800 text-xs font-bold text-white hover:bg-slate-700"
               >
                 -
               </button>
-              <span className="min-w-[14px] text-center text-xs font-bold">
+              <span className="min-w-[18px] text-center text-xs font-bold">
                 {quantity}
               </span>
               <button
                 type="button"
                 onClick={onAdd}
-                className="flex h-5 w-5 items-center justify-center rounded bg-slate-800 text-xs font-bold hover:bg-slate-700"
+                className="flex h-6 w-6 items-center justify-center rounded-md bg-slate-800 text-xs font-bold text-white hover:bg-slate-700"
               >
                 +
               </button>
@@ -471,77 +581,67 @@ const VariantCard = ({
   );
 };
 
-const MacroCard = ({
-  carbohydrates,
-  fat,
-  calories,
-  protein,
+const SingleCategory = ({
+  category,
+  languageId,
+  onVisibilityChange,
+  isLastVisibleSection,
 }: {
-  calories: number | null;
-  protein: number | null;
-  carbohydrates: number | null;
-  fat: number | null;
+  category: FullMenuOutput["categories"][0];
+  languageId: string;
+  onVisibilityChange: (isVisible: boolean) => void;
+  isLastVisibleSection: boolean;
 }) => {
+  const categoryName = getCategoryTranslations({ category, languageId });
+
+  const { ref } = useInView({
+    threshold: 0.1,
+    onChange: (inView) => {
+      onVisibilityChange(inView);
+    },
+  });
+
   return (
-    <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-500">
-      {calories !== null && <span>🔥 {calories} kcal</span>}
-      {protein !== null && <span>🍗 {protein}g P</span>}
-      {carbohydrates !== null && <span>🌾 {carbohydrates}g C</span>}
-      {fat !== null && <span>🥑 {fat}g F</span>}
+    <div
+      ref={ref}
+      id={`${category.id}-nav`}
+      onClick={() => {
+        const element = document.getElementById(category.id);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth" });
+        }
+      }}
+      className={cn(
+        "cursor-pointer rounded-xl px-4 py-2 text-sm font-extrabold transition-all duration-200 select-none",
+        isLastVisibleSection
+          ? "bg-slate-950 text-white shadow-sm"
+          : "bg-slate-100/80 text-slate-600 hover:bg-slate-200 hover:text-slate-900",
+      )}
+    >
+      {categoryName}
     </div>
   );
 };
 
-const SingleCategory = ({
-  category,
-  languageId,
-  isLastVisibleSection,
-  onVisibilityChange,
+const MacroCard = ({
+  calories,
+  carbohydrates,
+  fat,
+  protein,
 }: {
-  category: FullMenuOutput["categories"][number];
-  languageId: string;
-  isLastVisibleSection: boolean;
-  onVisibilityChange: (isVisible: boolean) => void;
+  calories: number | null;
+  carbohydrates: number | null;
+  fat: number | null;
+  protein: number | null;
 }) => {
-  const translatedCategory = getCategoryTranslations({ category, languageId });
-  const { ref, inView } = useInView({
-    onChange(_inView) {
-      onVisibilityChange(_inView);
-    },
-  });
-
-  const navigateToCategory = useCallback(() => {
-    const element = document.getElementById(category.id);
-
-    if (element) {
-      const elementRect = element.getBoundingClientRect();
-      const absoluteElementTop = elementRect.top + window.pageYOffset;
-      const finalScrollPosition = absoluteElementTop - 80;
-
-      window.scrollTo({
-        top: finalScrollPosition,
-        behavior: "smooth",
-      });
-    }
-  }, [category.id]);
-
-  useEffect(() => {
-    ref(document.getElementById(category.id));
-  }, [category.id, ref]);
+  if (!calories && !carbohydrates && !fat && !protein) return null;
 
   return (
-    <button
-      type="button"
-      onClick={navigateToCategory}
-      className={cn(
-        "shrink-0 whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-all hover:cursor-pointer select-none",
-        inView && isLastVisibleSection
-          ? "bg-slate-950 text-white shadow-md"
-          : "bg-slate-100 text-slate-700 hover:bg-slate-200",
-      )}
-      id={`${category.id}-nav`}
-    >
-      {translatedCategory}
-    </button>
+    <div className="flex flex-wrap gap-2 text-xs font-semibold text-slate-500">
+      {calories && <span>{calories} kcal</span>}
+      {protein && <span>• {protein}g protein</span>}
+      {carbohydrates && <span>• {carbohydrates}g carbs</span>}
+      {fat && <span>• {fat}g fat</span>}
+    </div>
   );
 };

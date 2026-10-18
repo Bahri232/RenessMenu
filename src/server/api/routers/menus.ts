@@ -58,6 +58,9 @@ const getFullMenu = async (slug: string, db: PrismaClient) =>
       googleReviewUrl: true,
       instagramUrl: true,
       dishes: {
+        orderBy: {
+          createdAt: "asc",
+        },
         select: {
           id: true,
           menuId: true,
@@ -107,6 +110,9 @@ const getFullMenu = async (slug: string, db: PrismaClient) =>
         },
       },
       categories: {
+        orderBy: {
+          createdAt: "asc",
+        },
         select: {
           id: true,
           categoriesTranslation: {

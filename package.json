@@ -5,6 +5,7 @@
   "scripts": {
     "build": "next build",
     "db:push": "prisma db push",
+    "db:seed": "node -r dotenv/config prisma/seed.mjs",
     "dev": "next dev",
     "postinstall": "prisma generate",
     "start": "next start",
@@ -100,6 +101,9 @@
   },
   "ct3aMetadata": {
     "initVersion": "7.20.2"
+  },
+  "prisma": {
+    "seed": "node -r dotenv/config prisma/seed.mjs"
   },
   "packageManager": "pnpm@8.8.0"
 }

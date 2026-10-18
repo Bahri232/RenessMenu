@@ -28,8 +28,34 @@ export const parseDishes = <T extends FullMenuOutput>(
     },
   ];
 
+  const CATEGORY_ORDER = [
+    "FOOD TRAYS",
+    "AFRICAN DISHES",
+    "BREAKFAST",
+    "NOODLES",
+    "PASTA",
+    "HAMBURGERS",
+    "WINGS",
+    "SANDWICHES",
+    "SHAWARMA",
+    "SALADS",
+    "MEAT STEAK",
+    "PIZZA",
+    "APPETIZERS & SOUPS",
+    "MAIN DISHES (CHICKEN)",
+    "SEAFOOD",
+    "DRINKS & BEVERAGES",
+  ];
+
   const sortedDishesByCategoryName = categorizedDishes.sort((a, b) => {
-    return a.category?.name.localeCompare(b.category?.name);
+    const aName = a.category?.name?.toUpperCase()?.trim() || "";
+    const bName = b.category?.name?.toUpperCase()?.trim() || "";
+    const aIndex = CATEGORY_ORDER.indexOf(aName);
+    const bIndex = CATEGORY_ORDER.indexOf(bName);
+    if (aIndex !== -1 && bIndex !== -1) return aIndex - bIndex;
+    if (aIndex !== -1) return -1;
+    if (bIndex !== -1) return 1;
+    return aName.localeCompare(bName);
   });
 
   const noCategoryDishes = allDishesWithCategories.filter(

@@ -1,0 +1,635 @@
+[
+  {
+    "name": "FOOD TRAYS",
+    "dishes": [
+      {
+        "name": "Food Tray, Mini",
+        "price": 200000,
+        "description": "Serves 8 to 10 people."
+      },
+      {
+        "name": "Food Tray, Medium",
+        "price": 300000,
+        "description": "Serves 15 people."
+      },
+      {
+        "name": "Food Tray, Large",
+        "price": 400000,
+        "description": "Serves 25 people."
+      }
+    ]
+  },
+  {
+    "name": "AFRICAN DISHES",
+    "dishes": [
+      {
+        "name": "Krain Krain",
+        "price": 12500
+      },
+      {
+        "name": "Cassava Leaf",
+        "price": 12500
+      },
+      {
+        "name": "Potato Leaf",
+        "price": 12500
+      },
+      {
+        "name": "Jollof Rice with Meat Stew",
+        "price": 22500
+      },
+      {
+        "name": "Jollof Rice with Chicken or Fish Stew",
+        "price": 21500,
+        "modifierGroups": [
+          {
+            "id": "choose-stew",
+            "name": "Choose Stew",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "chicken-stew", "name": "Chicken Stew" },
+              { "id": "fish-stew", "name": "Fish Stew" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Egg Fried Rice",
+        "price": 15500
+      },
+      {
+        "name": "Chicken Fried Rice",
+        "price": 19500
+      },
+      {
+        "name": "Meat Fried Rice",
+        "price": 21500
+      },
+      {
+        "name": "Seafood Fried Rice",
+        "price": 24500
+      },
+      {
+        "name": "Egusi Soup",
+        "price": 19500,
+        "description": "Served with your choice of swallow.",
+        "modifierGroups": [
+          {
+            "id": "choose-swallow",
+            "name": "Choose Swallow",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "foo-foo", "name": "Foo Foo" },
+              { "id": "eba", "name": "Eba" },
+              { "id": "pounded-yam", "name": "Pounded Yam" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Obiata / Sawa Soup",
+        "price": 19500,
+        "description": "Served with your choice of swallow.",
+        "modifierGroups": [
+          {
+            "id": "choose-swallow",
+            "name": "Choose Swallow",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "foo-foo", "name": "Foo Foo" },
+              { "id": "eba", "name": "Eba" },
+              { "id": "pounded-yam", "name": "Pounded Yam" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Acheke, Small",
+        "price": 22000,
+        "description": "Small Acheke served with your choice of protein.",
+        "modifierGroups": [
+          {
+            "id": "choose-protein",
+            "name": "Choose Protein",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "chicken-leg", "name": "Chicken Leg" },
+              { "id": "fish", "name": "Fish" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Acheke, Medium",
+        "price": 25000,
+        "description": "Medium Acheke served with your choice of protein set.",
+        "modifierGroups": [
+          {
+            "id": "choose-protein-set",
+            "name": "Choose Protein Set",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fish-chicken-leg", "name": "Fish & Chicken Leg" },
+              { "id": "half-chicken", "name": "Half Chicken" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Acheke, Large",
+        "price": 35000,
+        "description": "Large Acheke served with your choice of protein set.",
+        "modifierGroups": [
+          {
+            "id": "choose-protein-set",
+            "name": "Choose Protein Set",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              {
+                "id": "goat-meat-fish-chicken-leg",
+                "name": "Goat Meat, Fish & Chicken Leg"
+              },
+              { "id": "whole-chicken", "name": "Whole Chicken" }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "BREAKFAST",
+    "dishes": [
+      { "name": "Cheese Pie", "price": 13500 },
+      { "name": "Sausage Omelet", "price": 14500 },
+      { "name": "English Breakfast", "price": 16500 },
+      { "name": "Pancake Platter", "price": 16500 },
+      { "name": "Shrimp Omelet", "price": 19500 }
+    ]
+  },
+  {
+    "name": "NOODLES",
+    "dishes": [
+      { "name": "Vegetable Noodles", "price": 16500 },
+      { "name": "Chicken Noodles", "price": 19500 },
+      { "name": "Meat Noodles", "price": 21500 },
+      { "name": "Shrimp Noodles", "price": 21500 },
+      { "name": "Seafood Noodles", "price": 22500 },
+      { "name": "Supreme Noodles", "price": 22500 }
+    ]
+  },
+  {
+    "name": "PASTA",
+    "dishes": [
+      { "name": "Marinara Pasta", "price": 20500 },
+      { "name": "Spaghetti Bolognese", "price": 24500 },
+      { "name": "Meat Pasta", "price": 24500 }
+    ]
+  },
+  {
+    "name": "HAMBURGERS",
+    "dishes": [
+      { "name": "Fish Burger", "price": 16500 },
+      { "name": "Reness Special Burger", "price": 16500 },
+      { "name": "Egg Burger", "price": 17500 },
+      { "name": "Chicken Burger", "price": 18500 },
+      { "name": "Meat Burger", "price": 20500 }
+    ]
+  },
+  {
+    "name": "WINGS",
+    "dishes": [
+      { "name": "Spicy Wings", "price": 11500 },
+      { "name": "Barbecue Wings", "price": 11500 },
+      { "name": "Crispy Wings", "price": 11500 },
+      { "name": "Garlic Wings", "price": 11500 },
+      { "name": "Grilled Wings", "price": 11500 }
+    ]
+  },
+  {
+    "name": "SANDWICHES",
+    "dishes": [
+      { "name": "Chicken Sandwich", "price": 17500 },
+      { "name": "Club Sandwich", "price": 18500 },
+      { "name": "Shrimp Sandwich", "price": 19500 },
+      { "name": "Roast Meat Sandwich", "price": 21500 }
+    ]
+  },
+  {
+    "name": "SHAWARMA",
+    "dishes": [
+      { "name": "Vegetable Shawarma", "price": 10500 },
+      { "name": "Fish Shawarma", "price": 11000 },
+      { "name": "Chicken Shawarma", "price": 12000 },
+      { "name": "Beef Shawarma", "price": 13000 },
+      { "name": "Mixed Shawarma", "price": 17500 }
+    ]
+  },
+  {
+    "name": "SALADS",
+    "dishes": [
+      { "name": "Seafood Salad", "price": 15500 },
+      { "name": "Lebanese Salad", "price": 15500 },
+      { "name": "Avocado Salad", "price": 16500 },
+      { "name": "African Chicken Salad", "price": 17500 },
+      { "name": "Apple Salad", "price": 17500 }
+    ]
+  },
+  {
+    "name": "MEAT STEAK",
+    "dishes": [
+      { "name": "Blue Cheese Steak", "price": 31500 },
+      { "name": "Pepper Steak", "price": 32500 },
+      { "name": "Beef Cordon Bleu", "price": 32500 },
+      { "name": "Mushroom Steak", "price": 33500 }
+    ]
+  },
+  {
+    "name": "PIZZA",
+    "dishes": [
+      { "name": "Cheese Pizza", "price": 25500 },
+      { "name": "Vegetable Pizza", "price": 26500 },
+      { "name": "Shrimp Pizza", "price": 29500 },
+      { "name": "Barbecue Pizza", "price": 29500 },
+      { "name": "Pepperoni Pizza", "price": 29500 },
+      { "name": "Chicken Pizza", "price": 29500 },
+      { "name": "Seafood Pizza", "price": 30500 },
+      { "name": "Meat Pizza", "price": 30500 },
+      { "name": "Reness Delight Pizza", "price": 31500 }
+    ]
+  },
+  {
+    "name": "APPETIZERS & SOUPS",
+    "dishes": [
+      { "name": "French Fries", "price": 8500 },
+      { "name": "Vegetable Spring Rolls", "price": 10500 },
+      { "name": "Breaded Calamari", "price": 12500 },
+      { "name": "Garlic Bread with Cheese", "price": 12500 },
+      { "name": "Kabbe (4 Pieces)", "price": 13000 },
+      { "name": "Fish Fingers", "price": 14500 },
+      { "name": "Fried Meat Pie", "price": 14500 },
+      { "name": "Breaded Shrimp (4 Pieces)", "price": 14500 },
+      { "name": "African Pepper Soup", "price": 18500 },
+      { "name": "Seafood Soup", "price": 19500 },
+      { "name": "Goat Pepper Soup", "price": 22000 }
+    ]
+  },
+  {
+    "name": "MAIN DISHES (CHICKEN)",
+    "dishes": [
+      {
+        "name": "Fried Chicken Leg",
+        "price": 21500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "chips", "name": "Chips" },
+              { "id": "steamed-vegetables", "name": "Steamed Vegetables" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Boneless Chicken",
+        "price": 26500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "chips", "name": "Chips" },
+              { "id": "mashed-potato", "name": "Mashed Potato" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Grilled Half Chicken",
+        "price": 27500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "chips", "name": "Chips" },
+              { "id": "steamed-vegetables", "name": "Steamed Vegetables" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Chicken Breast",
+        "price": 29500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "chips", "name": "Chips" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Chicken Cordon Bleu",
+        "price": 34500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "chips", "name": "Chips" },
+              { "id": "mashed-potato", "name": "Mashed Potato" },
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "vegetables", "name": "Vegetables" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Whole Chicken",
+        "price": 46500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "chips", "name": "Chips" },
+              { "id": "steamed-vegetables", "name": "Steamed Vegetables" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Family Mixed Grilled Platter",
+        "price": 67000,
+        "description": "Served with Fish, Meat, Chicken, Shrimp, Fried Rice, Steamed Vegetables, Salad, and Kafta."
+      }
+    ]
+  },
+  {
+    "name": "SEAFOOD",
+    "dishes": [
+      {
+        "name": "Grilled Snapper Fish",
+        "price": 24500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "chips", "name": "Chips" },
+              { "id": "steamed-vegetables", "name": "Steamed Vegetables" },
+              { "id": "mashed-potato", "name": "Mashed Potato" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Breaded or Grilled Shrimp",
+        "price": 26500,
+        "description": "Served with your choice of preparation style and side dish.",
+        "modifierGroups": [
+          {
+            "id": "prep-style",
+            "name": "Preparation Style",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "breaded-shrimp", "name": "Breaded Shrimp" },
+              { "id": "grilled-shrimp", "name": "Grilled Shrimp" }
+            ]
+          },
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "chips", "name": "Chips" },
+              { "id": "steamed-vegetables", "name": "Steamed Vegetables" },
+              { "id": "mashed-potato", "name": "Mashed Potato" },
+              { "id": "salad", "name": "Salad" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Grilled Barracuda Fish",
+        "price": 29500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "chips", "name": "Chips" },
+              { "id": "steamed-vegetables", "name": "Steamed Vegetables" },
+              { "id": "coconut-rice", "name": "Coconut Rice" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Grilled Lobster, Small",
+        "price": 50500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "french-fries", "name": "French Fries" },
+              { "id": "steamed-vegetables", "name": "Steamed Vegetables" },
+              { "id": "mashed-potato", "name": "Mashed Potato" },
+              { "id": "coconut-rice", "name": "Coconut Rice" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Reness Platter",
+        "price": 50500,
+        "description": "Served with Shrimp, Fish, Fried Rice, and Calamari."
+      },
+      {
+        "name": "Grilled Lobster, Large",
+        "price": 58500,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "french-fries", "name": "French Fries" },
+              { "id": "steamed-vegetables", "name": "Steamed Vegetables" },
+              { "id": "mashed-potato", "name": "Mashed Potato" },
+              { "id": "coconut-rice", "name": "Coconut Rice" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Seafood Platter",
+        "price": 67000,
+        "description": "Served with your choice of side dish.",
+        "modifierGroups": [
+          {
+            "id": "choose-side",
+            "name": "Choose Side",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "fried-rice", "name": "Fried Rice" },
+              { "id": "salad", "name": "Salad" },
+              { "id": "steamed-vegetables", "name": "Steamed Vegetables" },
+              { "id": "mashed-potato", "name": "Mashed Potato" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Seafood Boil, Small",
+        "price": 80000,
+        "description": "Includes Lobster, Sausage, Egg, Potato, Shrimp, Crab, and Sweet and Sour Sauce."
+      },
+      {
+        "name": "Seafood Boil, Medium",
+        "price": 80000,
+        "description": "Includes Lobster, Sausage, Egg, Potato, Shrimp, Crab, and Sweet and Sour Sauce."
+      },
+      {
+        "name": "Seafood Boil, Large",
+        "price": 100000,
+        "description": "Includes Lobster, Sausage, Egg, Potato, Shrimp, Crab, and Sweet and Sour Sauce."
+      }
+    ]
+  },
+  {
+    "name": "DRINKS & BEVERAGES",
+    "dishes": [
+      {
+        "name": "Bottled Water (Small)",
+        "price": 1500,
+        "modifierGroups": [
+          {
+            "id": "temperature",
+            "name": "Temperature",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "chilled", "name": "Chilled" },
+              { "id": "room-temp", "name": "Room Temperature" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Bottled Water (Large)",
+        "price": 2500,
+        "modifierGroups": [
+          {
+            "id": "temperature",
+            "name": "Temperature",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "chilled", "name": "Chilled" },
+              { "id": "room-temp", "name": "Room Temperature" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Soft Drinks (Canned)",
+        "price": 4000,
+        "description": "Chilled 330ml can.",
+        "modifierGroups": [
+          {
+            "id": "choose-drink",
+            "name": "Choose Drink",
+            "required": true,
+            "minSelections": 1,
+            "maxSelections": 1,
+            "options": [
+              { "id": "coca-cola", "name": "Coca-Cola" },
+              { "id": "fanta", "name": "Fanta" },
+              { "id": "sprite", "name": "Sprite" },
+              { "id": "vimto", "name": "Vimto" }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Maltina (Canned)",
+        "price": 4500,
+        "description": "Chilled non-alcoholic malt drink."
+      }
+    ]
+  }
+]

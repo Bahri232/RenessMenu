@@ -2,12 +2,18 @@
 
 import { useEffect, useState, useCallback, useMemo } from "react";
 
+export interface SelectedModifier {
+  group: string;
+  option: string;
+}
+
 export interface CartItem {
-  id: string;
+  id: string; // Unique key combining dishId and selected modifiers
   dishId: string;
   name: string;
   price: number; // in cents
   quantity: number;
+  modifiers?: SelectedModifier[];
 }
 
 export const useMenuSelection = (menuSlug: string) => {
@@ -90,10 +96,21 @@ export const useMenuSelection = (menuSlug: string) => {
     }
   }, [storageKey]);
 
+  // Exact quantity for a specific line item
   const getItemQuantity = useCallback(
     (id: string) => {
       const found = items.find((i) => i.id === id);
       return found ? found.quantity : 0;
+    },
+    [items],
+  );
+
+  // Total quantity for a dish across all its modifier combinations
+  const getDishTotalQuantity = useCallback(
+    (dishId: string) => {
+      return items
+        .filter((i) => i.dishId === dishId)
+        .reduce((sum, i) => sum + i.quantity, 0);
     },
     [items],
   );
@@ -116,6 +133,7 @@ export const useMenuSelection = (menuSlug: string) => {
     removeItem,
     clearSelection,
     getItemQuantity,
+    getDishTotalQuantity,
     isWaiterModalOpen,
     setIsWaiterModalOpen,
   };

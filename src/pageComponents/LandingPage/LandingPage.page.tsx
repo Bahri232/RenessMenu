@@ -77,18 +77,21 @@ export const LandingPage = async () => {
                 </div>
               </a>
               <a
-                href="https://tryhards.space/"
+                href="https://x.com/abdul_m_barrie?s=11"
                 target="_blank"
-                className="group flex w-fit items-center gap-3 rounded-xl bg-landing-text py-3 pl-4 pr-8 text-white hover:bg-black"
+                rel="noreferrer"
+                className="group flex w-fit items-center gap-3 rounded-xl bg-landing-text py-3 pl-4 pr-8 text-white hover:bg-black transition-colors"
               >
                 <span className="rounded-full bg-white px-3 py-1 text-center text-xl font-bold text-landing-text group-hover:text-black">
-                  T
+                  A
                 </span>
                 <div className="flex flex-col text-left">
                   <span className="text-xs uppercase">
                     {t("landingPage.section1.credit")}
                   </span>
-                  <span className="leading-tight">Tryhards Inc</span>
+                  <span className="leading-tight font-semibold">
+                    Abdul Malik Barrie
+                  </span>
                 </div>
               </a>
             </div>
