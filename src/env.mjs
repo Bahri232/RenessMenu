@@ -60,14 +60,18 @@ export const env = createEnv({
       process.env.DATABASE_URL,
     NEXT_PUBLIC_SUPABASE_URL:
       process.env.NEXT_PUBLIC_SUPABASE_URL ??
+      process.env.NEXT_PUBLIC_SUPABASE_PROJECT_URL ??
       process.env.SUPABASE_URL,
     NEXT_PUBLIC_SUPABASE_ANON_KEY:
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ??
       process.env.NEXT_PUBLIC_SUPABASE_KEY ??
-      process.env.SUPABASE_ANON_KEY,
+      process.env.NEXT_PUBLIC_ANON_KEY ??
+      process.env.SUPABASE_ANON_KEY ??
+      process.env.SUPABASE_KEY,
     SUPABASE_SERVICE_KEY:
       process.env.SUPABASE_SERVICE_KEY ??
-      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      process.env.SUPABASE_SERVICE_ROLE_KEY ??
+      process.env.SUPABASE_SECRET_KEY,
     SUPABASE_SERVICE_ROLE_KEY:
       process.env.SUPABASE_SERVICE_ROLE_KEY ??
       process.env.SUPABASE_SERVICE_KEY,

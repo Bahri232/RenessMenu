@@ -19,16 +19,39 @@ import {
   loginValidationSchema,
 } from "./UserAuthForm.schema";
 
-const signInWithOauth = (provider: Provider) => {
-  void supabase().auth.signInWithOAuth({
-    provider: provider,
-    options: { redirectTo: `${window.location.origin}/dashboard` },
-  });
-};
-
 export function UserAuthForm() {
   const { t } = useTranslation();
   const { toast } = useToast();
+  const [oauthLoading, setOauthLoading] = React.useState(false);
+
+  const signInWithOauth = async (provider: Provider) => {
+    try {
+      setOauthLoading(true);
+      const { data, error } = await supabase().auth.signInWithOAuth({
+        provider: provider,
+        options: { redirectTo: `${window.location.origin}/dashboard` },
+      });
+
+      if (error) {
+        toast({
+          title: "Google Sign-In Error",
+          description: error.message,
+          variant: "destructive",
+          duration: 9000,
+        });
+        setOauthLoading(false);
+      }
+    } catch (err: any) {
+      toast({
+        title: "Google Sign-In Error",
+        description: err?.message || "Could not initiate Google sign in",
+        variant: "destructive",
+        duration: 9000,
+      });
+      setOauthLoading(false);
+    }
+  };
+
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginValidationSchema(t)),
     defaultValues: {
@@ -104,15 +127,30 @@ export function UserAuthForm() {
           {t("login.submitButton")}
         </Button>
       </form>
+      <div className="relative my-2">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-slate-200" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
       <button
         type="button"
-        className={cn(buttonVariants({ variant: "outline" }), "flex gap-2")}
+        disabled={oauthLoading}
+        className={cn(buttonVariants({ variant: "outline" }), "flex gap-2 items-center justify-center")}
         onClick={() => {
-          signInWithOauth("google");
+          void signInWithOauth("google");
         }}
       >
-        <Icons.google width={16} />
-        Google
+        {oauthLoading ? (
+          <Icons.spinner className="h-4 w-4 animate-spin" />
+        ) : (
+          <Icons.google width={16} />
+        )}
+        Continue with Google
       </button>
     </Form>
   );

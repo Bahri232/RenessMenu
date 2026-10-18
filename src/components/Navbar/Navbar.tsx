@@ -10,6 +10,7 @@ import { useUser } from "~/providers/AuthProvider/AuthProvider";
 import { LanguageToggle } from "../LanguageToggle/LanguageToggle";
 import { useTranslation } from "react-i18next";
 import { TranslatedText } from "../TranslatedText";
+import { Icons } from "~/components/Icons/Icons";
 
 const navbarItems: NavItem[] = [
   {
@@ -32,6 +33,15 @@ export const Navbar = () => {
       <div className="container flex h-16 items-center justify-between py-4">
         <MainNav items={navbarItems} />
         <div className="flex items-center justify-center gap-4">
+          <a
+            href="https://github.com/Bahri232"
+            target="_blank"
+            rel="noreferrer"
+            className="text-slate-600 hover:text-slate-900 transition-colors p-1"
+            aria-label="GitHub Profile"
+          >
+            <Icons.gitHub className="h-5 w-5" />
+          </a>
           <LanguageToggle />
           {userLoggedIn ? (
             <UserAccountNav />
